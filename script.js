@@ -15,7 +15,7 @@ const updateOrientation = e => {
   const propNames = ["absolute", "alpha", "beta", "gamma"]
   
   orientationSpan.innerHTML = propNames.reduce((coll, propName) => {
-    coll.push(`${propName`} = ${e[propName]}`)
+    coll.push(`${propName} = ${e[propName]}`)
     return coll
   }, []).join('<br />')
 }
