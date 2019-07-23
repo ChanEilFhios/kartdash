@@ -1,7 +1,9 @@
+console.log("In script.js")
+
 if (navigator && navigator.geolocation) {
   navigator.geolocation.getCurrentPosition((position) => {
-    alert(`position = ${position}`)
+    console.log(`position = ${position}`)
   })
 } else {
-  alert("This page requires geolocation services to function!")
+  console.log("This page requires geolocation services to function!")
 }
