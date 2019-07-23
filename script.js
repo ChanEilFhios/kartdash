@@ -12,10 +12,10 @@ const serializeCoords = coords => {
 }
 
 const updateOrientation = e => {
-  const propNames = ["absolute", "alpha", "beta", "gamma"]
+  const propNames = ["alpha", "beta", "gamma"]
   
   orientationSpan.innerHTML = propNames.reduce((coll, propName) => {
-    coll.push(`${propName} = ${e[propName]}`)
+    coll.push(`${propName} = ${Math.round(e[propName])}`)
     return coll
   }, []).join('<br />')
 }
