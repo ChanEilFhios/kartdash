@@ -1,8 +1,8 @@
-console.log("In script.js")
+const speedSpan = document.getElementById("speed")
 
 if (navigator && navigator.geolocation) {
   navigator.geolocation.getCurrentPosition((position) => {
-    console.log(`position = ${position}`)
+    speedSpan.innerHTML = JSON.stringify(position, null, 2)
   })
 } else {
   console.log("This page requires geolocation services to function!")
