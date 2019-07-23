@@ -17,7 +17,7 @@ const updateOrientation = e => {
   orientationSpan.innerHTML = propNames.reduce((coll, propName) => {
     coll.push(`${propName`} = ${e[propName]})
     return coll
-  })
+  }, []).join('<br />')
 }
 
 const updatePosition = position => {
