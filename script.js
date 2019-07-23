@@ -11,15 +11,6 @@ const serializeCoords = coords => {
 	return props.join('<br />')
 }
 
-const updateOrientation = e => {
-  const propNames = ["alpha", "beta", "gamma"]
-  
-  orientationSpan.innerHTML = propNames.reduce((coll, propName) => {
-    coll.push(`${propName} = ${Math.round(e[propName])}`)
-    return coll
-  }, []).join('<br />')
-}
-
 const updatePosition = position => {
   speedSpan.innerHTML = serializeCoords(position.coords)
 }
@@ -34,4 +25,9 @@ if (navigator && navigator.geolocation) {
   console.log("This page requires geolocation services to function!")
 }
 
-window.addEventListener("deviceorientation", updateOrientation)
+const sensor = new AbsoluteOrientationSensor()
+sensor.addEventListener('reading', function(e) {
+  const q = e.target.quaternion
+  const heading = Math.atan2(2*q[0]*q[1] + 2*q[2]*q[3], 1 - 2*q[1]*q[1] - 2*q[2]*q[2])*(180/Math.PI)
+  orientationSpan.innerHTML = `${heading} degrees`
+}
