@@ -1,4 +1,5 @@
 const speedSpan = document.getElementById("speed")
+let positionWatcher
 
 const serializeCoords = coords => {
   const props = []
@@ -8,9 +9,15 @@ const serializeCoords = coords => {
 	return props.join('<br />')
 }
 
+const updatePosition = position => {
+  speedSpan.innerHTML = serializeCoords(position.coords)
+}
+
+const handleError = error => console.log("Error from watchPosition", error)
+
 if (navigator && navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition((position) => {
-    speedSpan.innerHTML = serializeCoords(position.coords)
+  positionWatcher = navigator.geolocation.watchPosition(updatePosition, handleError, {
+    enabledHighAccuracy: true
   })
 } else {
   console.log("This page requires geolocation services to function!")
