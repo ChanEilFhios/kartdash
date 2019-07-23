@@ -1,4 +1,6 @@
 const speedSpan = document.getElementById("speed")
+const orientationSpan = document.getElementById("orientation")
+
 let positionWatcher
 
 const serializeCoords = coords => {
@@ -7,6 +9,15 @@ const serializeCoords = coords => {
       props.push(`${n} = ${coords[n]}`)
   }
 	return props.join('<br />')
+}
+
+const updateOrientation = e => {
+  const propNames = ["absolute", "alpha", "beta", "gamma"]
+  
+  orientationSpan.innerHTML = propNames.reduce((coll, propName) => {
+    coll.push(`${propName`} = ${e[propName]})
+    return coll
+  })
 }
 
 const updatePosition = position => {
@@ -22,3 +33,5 @@ if (navigator && navigator.geolocation) {
 } else {
   console.log("This page requires geolocation services to function!")
 }
+
+window.addEventListener("deviceorientation", updateOrientation)
