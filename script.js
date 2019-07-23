@@ -5,7 +5,7 @@ const serializeCoords = coords => {
   for (let n in coords) {
       props.push(`${n} = ${coords[n]}`)
   }
-	return props.join('\n')
+	return props.join('<br />')
 }
 
 if (navigator && navigator.geolocation) {
