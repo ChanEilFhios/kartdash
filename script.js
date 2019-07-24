@@ -28,7 +28,9 @@ if (navigator && navigator.geolocation) {
 const sensor = new AbsoluteOrientationSensor()
 sensor.addEventListener('reading', function(e) {
   const q = e.target.quaternion
-  const heading = Math.atan2(2*q[0]*q[1] + 2*q[2]*q[3], 1 - 2*q[1]*q[1] - 2*q[2]*q[2])*(180/Math.PI)
+  let heading = Math.atan2(2*q[0]*q[1] + 2*q[2]*q[3], 1 - 2*q[1]*q[1] - 2*q[2]*q[2])*(180/Math.PI)
+  if(heading < 0) heading = 360+heading;
+
   orientationSpan.innerHTML = `${heading} degrees`
 })
 sensor.start()
