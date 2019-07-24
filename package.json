@@ -1,0 +1,23 @@
+{
+  "name": "kartdash",
+  "version": "1.0.0",
+  "description": "A phone based dashboard for use on a go kart",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChanEilFhios/kartdash.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChanEilFhios/kartdash/issues"
+  },
+  "homepage": "https://github.com/ChanEilFhios/kartdash#readme",
+  "devDependencies": {
+    "eslint": "6.1.0"
+  }
+}
