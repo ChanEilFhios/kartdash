@@ -1,56 +1,23 @@
-const speedSpan = document.getElementById("speed")
-const orientationSpan = document.getElementById("orientation")
-const stopBtn = document.getElementById("stop")
-const startBtn = document.getElementById("start")
-
-let positionWatcher
-
-const serializeCoords = coords => {
-  const props = []
-  for (let n in coords) {
-      props.push(`${n} = ${coords[n]}`)
+(function (g) {
+  let state = {
+    "speed": 0,
+    "track": [],
+    "heading": 0
   }
-	return props.join('<br />')
-}
 
-const updatePosition = position => {
-  speedSpan.innerHTML = serializeCoords(position.coords)
-}
+  const stateObservers = []
 
-const handleError = error => {
-  console.log("Error from watchPosition", error)
-}
-
-const sensor = new AbsoluteOrientationSensor()
-sensor.addEventListener('reading', function(e) {
-  const q = e.target.quaternion
-  let heading = Math.round(Math.atan2(2*q[0]*q[1] + 2*q[2]*q[3], 1 - 2*q[1]*q[1] - 2*q[2]*q[2])*(180/Math.PI))
-  if (heading < 0) heading += 360
-  
-  orientationSpan.innerHTML = `${heading} degrees`
-})
-
-const stopWatching = () => {
-  stopBtn.style.display = "none"
-  startBtn.style.display = "block"
-
-  navigator.geolocation.clearWatch(positionWatcher)
-}
-
-const startWatching = () => {
-  stopBtn.style.display = "block"
-  startBtn.style.display = "none"
-
-  sensor.start()
-  
-  if (navigator && navigator.geolocation) {
-    positionWatcher = navigator.geolocation.watchPosition(updatePosition, handleError, {
-      enabledHighAccuracy: true
-    })
-  } else {
-    console.log("This page requires geolocation services to function!")
+  g.app = {
+    updateState,
+    addStateObserver
   }
-}
 
-stopBtn.addEventListener("click", stopWatching)
-startBtn.addEventListener("click", startWatching)
+  function addStateObserver(fn) {
+    stateObservers.push(fn)
+  }
+
+  function updateState(newState) {
+    state = Object.assign({}, state, newState)
+    stateObservers.map(observer => observer(state))
+  }
+})(window)
