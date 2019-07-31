@@ -21,20 +21,24 @@ const handleError = error => {
   console.log("Error from watchPosition", error)
 }
 
-const sensor = new AbsoluteOrientationSensor()
-sensor.addEventListener('reading', function (e) {
+const updateOrientation = e => {
   const q = e.target.quaternion
   let heading = Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
   if (heading < 0) heading += 360
 
   orientationSpan.innerHTML = `${heading} degrees`
-})
+}
+
+const sensor = new AbsoluteOrientationSensor()
+sensor.addEventListener('reading', updateOrientation)
 
 const stopWatching = () => {
   stopBtn.style.display = "none"
   startBtn.style.display = "block"
 
   navigator.geolocation.clearWatch(positionWatcher)
+  positionWatcher = undefined
+  sensor.stop()
 }
 
 const startWatching = () => {
