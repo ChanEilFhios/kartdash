@@ -23,9 +23,14 @@ orientationStream.onValue(updateOrientation)
 
 let positionWatcher
 
+
 const streamGeoLocation = emitter => {
+  const wrapEmitter = value => {
+    emitter.value(value)
+  }
+
   if (navigator && navigator.geolocation) {
-    positionWatcher = navigator.geolocation.watchPosition(emitter.value, emitter.error, {
+    positionWatcher = navigator.geolocation.watchPosition(wrapEmitter, emitter.error, {
       enabledHighAccuracy: true
     })
   } else {
@@ -43,6 +48,14 @@ const serializeCoords = coords => {
 
 const updatePosition = elUpdater("speed")
 
+const handlePositionStream = event => {
+  if (event.type === "value") {
+    updatePosition(event.value)
+  } else if (event.type === "error") {
+    console.log(event.value)
+  }
+}
+
 const geoLocationStream = Kefir.stream(streamGeoLocation)
   .map(serializeCoords)
 
@@ -51,7 +64,7 @@ const stopWatching = () => {
   startBtn.style.display = "block"
 
   navigator.geolocation.clearWatch(positionWatcher)
-  geoLocationStream.offAny(updatePosition)
+  geoLocationStream.offAny(handlePositionStream)
   positionWatcher = undefined
   sensor.stop()
 }
@@ -61,7 +74,7 @@ const startWatching = () => {
   startBtn.style.display = "none"
 
   sensor.start()
-  geoLocationStream.onAny(updatePosition)
+  geoLocationStream.onAny(handlePositionStream)
 }
 
 stopBtn.addEventListener("click", stopWatching)
