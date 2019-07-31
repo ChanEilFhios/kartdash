@@ -1,4 +1,3 @@
-const speedSpan = document.getElementById("speed")
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
@@ -24,6 +23,16 @@ orientationStream.onValue(updateOrientation)
 
 let positionWatcher
 
+const streamGeoLocation = emitter => {
+  if (navigator && navigator.geolocation) {
+    positionWatcher = navigator.geolocation.watchPosition(emitter.value, emitter.error, {
+      enabledHighAccuracy: true
+    })
+  } else {
+    emitter.error("geoLocation required!")
+  }
+}
+
 const serializeCoords = coords => {
   const props = []
   for (let n in coords) {
@@ -32,17 +41,17 @@ const serializeCoords = coords => {
   return props.join('<br />')
 }
 
-const updatePosition = position => speedSpan.innerHTML = serializeCoords(position.coords)
+const updatePosition = elUpdater("speed")
 
-const handleError = error => {
-  console.log("Error from watchPosition", error)
-}
+const geoLocationStream = Kefir.stream(streamGeoLocation)
+  .map(serializeCoords)
 
 const stopWatching = () => {
   stopBtn.style.display = "none"
   startBtn.style.display = "block"
 
   navigator.geolocation.clearWatch(positionWatcher)
+  geoLocationStream.offAny(updatePosition)
   positionWatcher = undefined
   sensor.stop()
 }
@@ -52,14 +61,7 @@ const startWatching = () => {
   startBtn.style.display = "none"
 
   sensor.start()
-
-  if (navigator && navigator.geolocation) {
-    positionWatcher = navigator.geolocation.watchPosition(updatePosition, handleError, {
-      enabledHighAccuracy: true
-    })
-  } else {
-    console.log("This page requires geolocation services to function!")
-  }
+  geoLocationStream.onAny(updatePosition)
 }
 
 stopBtn.addEventListener("click", stopWatching)
