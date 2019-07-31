@@ -57,6 +57,7 @@ const handlePositionStream = event => {
 }
 
 const geoLocationStream = Kefir.stream(streamGeoLocation)
+  .map(position => position.coords)
   .map(serializeCoords)
 
 const stopWatching = () => {
