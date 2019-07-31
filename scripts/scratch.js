@@ -1,7 +1,26 @@
 const speedSpan = document.getElementById("speed")
-const orientationSpan = document.getElementById("orientation")
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
+
+const elUpdater = id => {
+  const el = document.getElementById(id)
+  return (text) => el.innerHTML = text
+}
+
+const calcHeadingFromQuaternion = q => Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
+const normalizeHeading = heading => (heading < 0) ? heading += 360 : heading
+const decorateHeading = heading => `${heading} degrees`
+const updateOrientation = elUpdater("orientation") 
+
+const sensor = new AbsoluteOrientationSensor()
+const orientationStream = Kefir.fromEvents(sensor, 'reading')
+  .map(e => e.target.quaternion)
+  .map(calcHeadingFromQuaternion)
+  .map(normalizeHeading)
+  .map(decorateHeading)
+
+orientationStream.onValue(updateOrientation)
+
 
 let positionWatcher
 
@@ -13,24 +32,11 @@ const serializeCoords = coords => {
   return props.join('<br />')
 }
 
-const updatePosition = position => {
-  speedSpan.innerHTML = serializeCoords(position.coords)
-}
+const updatePosition = position => speedSpan.innerHTML = serializeCoords(position.coords)
 
 const handleError = error => {
   console.log("Error from watchPosition", error)
 }
-
-const updateOrientation = e => {
-  const q = e.target.quaternion
-  let heading = Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
-  if (heading < 0) heading += 360
-
-  orientationSpan.innerHTML = `${heading} degrees`
-}
-
-const sensor = new AbsoluteOrientationSensor()
-sensor.addEventListener('reading', updateOrientation)
 
 const stopWatching = () => {
   stopBtn.style.display = "none"
