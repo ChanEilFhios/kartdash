@@ -16,9 +16,10 @@ const orientationStream = Kefir.fromEvents(sensor, 'reading')
   .map(e => e.target.quaternion)
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
-  .map(decorateHeading)
 
-orientationStream.onValue(updateOrientation)
+orientationStream
+  .map(decorateHeading)
+  .onValue(updateOrientation)
 
 let positionWatcher
 
