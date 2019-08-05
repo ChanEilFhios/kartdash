@@ -4,6 +4,7 @@ const elUpdater = id => {
 }
 
 const setElStyle = (el, attr, value) => () => el.style[attr] = value
+const displayEl = (el, show) => setElStyle(el, "display", show ? "block": "none")
 
 const calcHeadingFromQuaternion = q => Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
 const normalizeHeading = heading => (heading < 0) ? heading += 360 : heading
@@ -64,8 +65,8 @@ const stopWatching = () => {
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
 stopClickStream
   .onValue(stopWatching)
-  .onValue(setElStyle(stopBtn, "display", "none"))
-  .onValue(setElStyle(startBtn, "display", "block"))
+  .onValue(displayEl(stopBtn, false))
+  .onValue(displayEl(startBtn, true))
   .onValue(()=> sensor.stop())
 
 const startWatching = () => {
@@ -74,6 +75,6 @@ const startWatching = () => {
 const startClickStream = Kefir.fromEvents(startBtn, "click")
 startClickStream
   .onValue(startWatching)
-  .onValue(setElStyle(startBtn, "display", "none"))
-  .onValue(setElStyle(stopBtn, "display", "block"))
+  .onValue(displayEl(startBtn, false))
+  .onValue(displayEl(stopBtn, true))
   .onValue(() => sensor.start())
