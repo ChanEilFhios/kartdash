@@ -1,6 +1,3 @@
-const stopBtn = document.getElementById("stop")
-const startBtn = document.getElementById("start")
-
 const elUpdater = id => {
   const el = document.getElementById(id)
   return (text) => el.innerHTML = text
@@ -20,9 +17,7 @@ const orientationStream = Kefir.fromEvents(sensor, 'reading')
 
 orientationStream.onValue(updateOrientation)
 
-
 let positionWatcher
-
 
 const streamGeoLocation = emitter => {
   if (navigator && navigator.geolocation) {
@@ -56,6 +51,9 @@ const geoLocationStream = Kefir.stream(streamGeoLocation)
   .map(position => position.coords)
   .map(serializeCoords)
 
+const stopBtn = document.getElementById("stop")
+const startBtn = document.getElementById("start")
+
 const stopWatching = () => {
   stopBtn.style.display = "none"
   startBtn.style.display = "block"
@@ -65,6 +63,8 @@ const stopWatching = () => {
   positionWatcher = undefined
   sensor.stop()
 }
+const stopClickStream = Kefir.fromEvents(stopBtn, "click")
+stopClickStream.onValue(stopWatching)
 
 const startWatching = () => {
   stopBtn.style.display = "block"
@@ -73,8 +73,5 @@ const startWatching = () => {
   sensor.start()
   geoLocationStream.onAny(handlePositionStream)
 }
-
-const stopClickStream = Kefir.fromEvents(stopBtn, "click")
-stopClickStream.onValue(stopWatching)
-
-startBtn.addEventListener("click", startWatching)
+const startClickStream = Kefir.fromEvents(startBtn, "click")
+startClickStream.onValue(startWatching)
