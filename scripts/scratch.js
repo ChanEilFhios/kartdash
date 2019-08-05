@@ -25,10 +25,6 @@ let positionWatcher
 
 
 const streamGeoLocation = emitter => {
-  // const wrapEmitter = value => {
-  //   emitter.value(value)
-  // }
-
   if (navigator && navigator.geolocation) {
     positionWatcher = navigator.geolocation.watchPosition(emitter.value, emitter.error, {
       enabledHighAccuracy: true
