@@ -60,16 +60,15 @@ const stopWatching = () => {
   navigator.geolocation.clearWatch(positionWatcher)
   geoLocationStream.offAny(handlePositionStream)
   positionWatcher = undefined
-  sensor.stop()
 }
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
 stopClickStream
   .onValue(stopWatching)
   .onValue(setElStyle(stopBtn, "display", "none"))
   .onValue(setElStyle(startBtn, "display", "block"))
+  .onValue(()=> sensor.stop())
 
 const startWatching = () => {
-  sensor.start()
   geoLocationStream.onAny(handlePositionStream)
 }
 const startClickStream = Kefir.fromEvents(startBtn, "click")
@@ -77,3 +76,4 @@ startClickStream
   .onValue(startWatching)
   .onValue(setElStyle(startBtn, "display", "none"))
   .onValue(setElStyle(stopBtn, "display", "block"))
+  .onValue(() => sensor.start())
