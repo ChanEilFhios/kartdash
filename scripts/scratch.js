@@ -3,6 +3,8 @@ const elUpdater = id => {
   return (text) => el.innerHTML = text
 }
 
+const setElStyle = (el, attr, value) => () => el.style[attr] = value
+
 const calcHeadingFromQuaternion = q => Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
 const normalizeHeading = heading => (heading < 0) ? heading += 360 : heading
 const decorateHeading = heading => `${heading} degrees`
@@ -55,23 +57,23 @@ const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
 const stopWatching = () => {
-  stopBtn.style.display = "none"
-  startBtn.style.display = "block"
-
   navigator.geolocation.clearWatch(positionWatcher)
   geoLocationStream.offAny(handlePositionStream)
   positionWatcher = undefined
   sensor.stop()
 }
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
-stopClickStream.onValue(stopWatching)
+stopClickStream
+  .onValue(stopWatching)
+  .onvalue(setElStyle(stopBtn, "display", "none"))
+  .onvalue(setElStyle(startBtn, "display", "block"))
 
 const startWatching = () => {
-  stopBtn.style.display = "block"
-  startBtn.style.display = "none"
-
   sensor.start()
   geoLocationStream.onAny(handlePositionStream)
 }
 const startClickStream = Kefir.fromEvents(startBtn, "click")
-startClickStream.onValue(startWatching)
+startClickStream
+  .onValue(startWatching)
+  .onvalue(setElStyle(startBtn, "display", "none"))
+  .onvalue(setElStyle(stopBtn, "display", "block"))
