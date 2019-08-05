@@ -65,8 +65,8 @@ const stopWatching = () => {
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
 stopClickStream
   .onValue(stopWatching)
-  .onvalue(setElStyle(stopBtn, "display", "none"))
-  .onvalue(setElStyle(startBtn, "display", "block"))
+  .onValue(setElStyle(stopBtn, "display", "none"))
+  .onValue(setElStyle(startBtn, "display", "block"))
 
 const startWatching = () => {
   sensor.start()
@@ -75,5 +75,5 @@ const startWatching = () => {
 const startClickStream = Kefir.fromEvents(startBtn, "click")
 startClickStream
   .onValue(startWatching)
-  .onvalue(setElStyle(startBtn, "display", "none"))
-  .onvalue(setElStyle(stopBtn, "display", "block"))
+  .onValue(setElStyle(startBtn, "display", "none"))
+  .onValue(setElStyle(stopBtn, "display", "block"))
