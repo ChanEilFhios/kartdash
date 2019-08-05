@@ -41,7 +41,6 @@ const serializeCoords = coords => {
 }
 
 const updatePosition = elUpdater("speed")
-
 const handlePositionStream = event => {
   if (event.type === "value") {
     updatePosition(event.value)
@@ -57,24 +56,24 @@ const geoLocationStream = Kefir.stream(streamGeoLocation)
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
-const stopWatching = () => {
+const stopWatchingGeoLocation = () => {
   navigator.geolocation.clearWatch(positionWatcher)
   geoLocationStream.offAny(handlePositionStream)
   positionWatcher = undefined
 }
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
 stopClickStream
-  .onValue(stopWatching)
+  .onValue(stopWatchingGeoLocation)
   .onValue(displayEl(stopBtn, false))
   .onValue(displayEl(startBtn, true))
   .onValue(()=> sensor.stop())
 
-const startWatching = () => {
+const startWatchingGeoLocation = () => {
   geoLocationStream.onAny(handlePositionStream)
 }
 const startClickStream = Kefir.fromEvents(startBtn, "click")
 startClickStream
-  .onValue(startWatching)
+  .onValue(startWatchingGeoLocation)
   .onValue(displayEl(startBtn, false))
   .onValue(displayEl(stopBtn, true))
   .onValue(() => sensor.start())
