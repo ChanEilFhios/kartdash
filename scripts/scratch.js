@@ -74,5 +74,7 @@ const startWatching = () => {
   geoLocationStream.onAny(handlePositionStream)
 }
 
-stopBtn.addEventListener("click", stopWatching)
+const stopClickStream = Kefir.fromEvents(stopBtn, "click")
+stopClickStream.onValue(stopWatching)
+
 startBtn.addEventListener("click", startWatching)
