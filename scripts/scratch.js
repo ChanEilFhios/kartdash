@@ -33,8 +33,9 @@ const streamGeoLocation = emitter => {
   }
 }
 
-const serializeCoords = coords => {
-  const props = []
+const serializeCoords = position => {
+  const props = [`timestamp = ${position.timestamp}`]
+  const coords = position.coords
   for (let n in coords) {
     props.push(`${n} = ${coords[n]}`)
   }
@@ -51,7 +52,6 @@ const handlePositionStream = event => {
 }
 
 const geoLocationStream = Kefir.stream(streamGeoLocation)
-  .map(position => position.coords)
   .map(serializeCoords)
 
 const stopBtn = document.getElementById("stop")
