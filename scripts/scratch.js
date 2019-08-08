@@ -21,13 +21,11 @@ orientationStream
   .map(decorateHeading)
   .onValue(updateOrientation)
 
-let positionWatcher
-
 const streamGeoLocation = emitter => {
   if (navigator && navigator.geolocation) {
-    positionWatcher = navigator.geolocation.watchPosition(emitter.value, emitter.error, {
-      enabledHighAccuracy: true
-    })
+    const positionWatcher = navigator.geolocation.watchPosition(emitter.value, emitter.error, {enabledHighAccuracy: true})
+
+    return () => navigator.geolocation.clearWatch(positionWatcher)
   } else {
     emitter.error("geoLocation required!")
   }
@@ -58,9 +56,7 @@ const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
 const stopWatchingGeoLocation = () => {
-  navigator.geolocation.clearWatch(positionWatcher)
   geoLocationStream.offAny(handlePositionStream)
-  positionWatcher = undefined
 }
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
 stopClickStream
