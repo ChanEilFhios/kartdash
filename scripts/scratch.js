@@ -53,8 +53,9 @@ const rawGeoLocationStream = Kefir.stream(streamGeoLocation)
 
 const updateSpeed = elUpdater("speed")
 const speedGeoStream = rawGeoLocationStream
-  .map((position) => ({speed: position.coords.speed, timestamp: position.timestamp}))
-  .onValue(updateSpeed)
+  .filter(position => position.coords.speed === null)
+  .map(position => position.coords.speed)
+speedGeoStream.onValue(updateSpeed)
 
 const geoLocationStream = rawGeoLocationStream
   .map(serializeCoords)
