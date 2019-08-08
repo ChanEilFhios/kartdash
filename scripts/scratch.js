@@ -40,23 +40,30 @@ const serializeCoords = position => {
   return props.join('<br />')
 }
 
-const updatePosition = elUpdater("speed")
-const handlePositionStream = event => {
+const updateGeoLocation = elUpdater("geolocation")
+const handleGeoLocationStream = event => {
   if (event.type === "value") {
-    updatePosition(event.value)
+    updateGeoLocation(event.value)
   } else if (event.type === "error") {
     console.log(event.value)
   }
 }
 
-const geoLocationStream = Kefir.stream(streamGeoLocation)
+const rawGeoLocationStream = Kefir.stream(streamGeoLocation)
+
+const updateSpeed = elUpdater("speed")
+const speedGeoStream = rawGeoLocationStream
+  .map((position) => ({speed: position.coords.speed, timestamp: position.timestamp}))
+  .onValue(updateSpeed)
+
+const geoLocationStream = rawGeoLocationStream
   .map(serializeCoords)
 
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
 const stopWatchingGeoLocation = () => {
-  geoLocationStream.offAny(handlePositionStream)
+  geoLocationStream.offAny(handleGeoLocationStream)
 }
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
 stopClickStream
@@ -66,7 +73,7 @@ stopClickStream
   .onValue(()=> sensor.stop())
 
 const startWatchingGeoLocation = () => {
-  geoLocationStream.onAny(handlePositionStream)
+  geoLocationStream.onAny(handleGeoLocationStream)
 }
 const startClickStream = Kefir.fromEvents(startBtn, "click")
 startClickStream
