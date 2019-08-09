@@ -18,7 +18,7 @@ const orientationStream = createNewAbsOrientationStream()
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 
-orientationStream
+const orientationDisplayStream = orientationStream
   .map(decorateHeading)
 
 const streamGeoLocation = emitter => {
@@ -63,8 +63,8 @@ const geoLocationStream = rawGeoLocationStream
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
-const stopWatchingOrientation = () => orientationStream.offValue(updateOrientation)
-const startWatchingOrientation = () => orientationStream.onValue(updateOrientation)
+const stopWatchingOrientation = () => orientationDisplayStream.offValue(updateOrientation)
+const startWatchingOrientation = () => orientationDisplayStream.onValue(updateOrientation)
 
 const stopWatchingGeoLocation = () => {
   geoLocationStream.offAny(handleGeoLocationStream)
