@@ -4,6 +4,12 @@ import {
   normalizeHeading
 } from './absorientationstream.js'
 
+import {
+  createGeoLocationStream,
+  extractSpeed,
+  serializeCoords
+} from './geolocationstream.js'
+
 const elUpdater = id => {
   const el = document.getElementById(id)
   return (text) => el.innerHTML = text
@@ -20,43 +26,13 @@ const decorateHeading = heading => `${heading} degrees`
 const orientationDisplayStream = orientationStream
   .map(decorateHeading)
 
-const streamGeoLocation = emitter => {
-  if (navigator && navigator.geolocation) {
-    const positionWatcher = navigator.geolocation.watchPosition(emitter.value, emitter.error, {enabledHighAccuracy: true})
+const rawGeoLocationStream = createGeoLocationStream({ enabledHighAccuracy: true })
 
-    return () => navigator.geolocation.clearWatch(positionWatcher)
-  } else {
-    emitter.error("geoLocation required!")
-  }
-}
-
-const serializeCoords = position => {
-  const props = [`timestamp = ${position.timestamp}`]
-  const coords = position.coords
-  for (let n in coords) {
-    props.push(`${n} = ${coords[n]}`)
-  }
-  return props.join('<br />')
-}
-
-const updateGeoLocation = elUpdater("geolocation")
-const handleGeoLocationStream = event => {
-  if (event.type === "value") {
-    updateGeoLocation(event.value)
-  } else if (event.type === "error") {
-    console.log(event.value)
-  }
-}
-
-const rawGeoLocationStream = Kefir.stream(streamGeoLocation)
-
-const updateSpeed = elUpdater("speed")
 const speedGeoStream = rawGeoLocationStream
-  .filter(position => position.coords.speed === null)
-  .map(position => position.coords.speed)
-speedGeoStream.onValue(updateSpeed)
+  .map(extractSpeed)
+  .filter(speed => speed === null)
 
-const geoLocationStream = rawGeoLocationStream
+const geoLocationDisplayStream = rawGeoLocationStream
   .map(serializeCoords)
 
 const stopBtn = document.getElementById("stop")
@@ -66,22 +42,26 @@ const updateOrientation = elUpdater("orientation")
 const stopWatchingOrientation = () => orientationDisplayStream.offValue(updateOrientation)
 const startWatchingOrientation = () => orientationDisplayStream.onValue(updateOrientation)
 
-const stopWatchingGeoLocation = () => {
-  geoLocationStream.offAny(handleGeoLocationStream)
-}
+const updateGeoLocation = elUpdater("geolocation")
+const stopWatchingGeoLocation = () => geoLocationDisplayStream.offValue(updateGeoLocation)
+const startWatchingGeoLocation = () => geoLocationDisplayStream.onValue(updateGeoLocation)
+
+const updateSpeed = elUpdater("speed")
+const stopWatchingSpeed = () => speedGeoStream.offValue(updateSpeed)
+const startWatchingSpeed = () => speedGeoStream.onValue(updateSpeed)
+
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
 stopClickStream
-  .onValue(stopWatchingGeoLocation)
   .onValue(displayEl(stopBtn, false))
   .onValue(displayEl(startBtn, true))
   .onValue(stopWatchingOrientation)
+  .onValue(stopWatchingGeoLocation)
+  .onValue(stopWatchingSpeed)
 
-const startWatchingGeoLocation = () => {
-  geoLocationStream.onAny(handleGeoLocationStream)
-}
 const startClickStream = Kefir.fromEvents(startBtn, "click")
 startClickStream
-  .onValue(startWatchingGeoLocation)
-  .onValue(displayEl(startBtn, false))
-  .onValue(displayEl(stopBtn, true))
-  .onValue(startWatchingOrientation)
+.onValue(displayEl(startBtn, false))
+.onValue(displayEl(stopBtn, true))
+.onValue(startWatchingOrientation)
+.onValue(startWatchingGeoLocation)
+.onValue(startWatchingSpeed)
