@@ -1,3 +1,5 @@
+import {createNewAbsOrientationStream} from 'scripts/absorientationstream.js'
+
 const elUpdater = id => {
   const el = document.getElementById(id)
   return (text) => el.innerHTML = text
@@ -11,15 +13,13 @@ const normalizeHeading = heading => (heading < 0) ? heading += 360 : heading
 const decorateHeading = heading => `${heading} degrees`
 const updateOrientation = elUpdater("orientation") 
 
-const sensor = new AbsoluteOrientationSensor()
-const orientationStream = Kefir.fromEvents(sensor, 'reading')
+const orientationStream = createNewAbsOrientationStream()
   .map(e => e.target.quaternion)
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 
 orientationStream
   .map(decorateHeading)
-  .onValue(updateOrientation)
 
 const streamGeoLocation = emitter => {
   if (navigator && navigator.geolocation) {
@@ -63,6 +63,9 @@ const geoLocationStream = rawGeoLocationStream
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
+const stopWatchingOrientation = () => orientationStream.offValue(updateOrientation)
+const startWatchingOrientation = () => orientationStream.onValue(updateOrientation)
+
 const stopWatchingGeoLocation = () => {
   geoLocationStream.offAny(handleGeoLocationStream)
 }
@@ -71,7 +74,7 @@ stopClickStream
   .onValue(stopWatchingGeoLocation)
   .onValue(displayEl(stopBtn, false))
   .onValue(displayEl(startBtn, true))
-  .onValue(()=> sensor.stop())
+  .onValue(stopWatchingOrientation)
 
 const startWatchingGeoLocation = () => {
   geoLocationStream.onAny(handleGeoLocationStream)
@@ -81,4 +84,4 @@ startClickStream
   .onValue(startWatchingGeoLocation)
   .onValue(displayEl(startBtn, false))
   .onValue(displayEl(stopBtn, true))
-  .onValue(() => sensor.start())
+  .onValue(startWatchingOrientation)
