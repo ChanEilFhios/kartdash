@@ -1,4 +1,4 @@
-import {createNewAbsOrientationStream} from 'scripts/absorientationstream.js'
+import {createNewAbsOrientationStream} from './absorientationstream.js'
 
 const elUpdater = id => {
   const el = document.getElementById(id)
