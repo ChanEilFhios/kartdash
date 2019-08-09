@@ -16,7 +16,6 @@ const decorateHeading = heading => `${heading} degrees`
 const updateOrientation = elUpdater("orientation") 
 
 const orientationStream = createNewAbsOrientationStream()
-  .map(e => e.target.quaternion)
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 

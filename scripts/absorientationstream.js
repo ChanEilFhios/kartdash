@@ -10,6 +10,7 @@ export function createNewAbsOrientationStream(options) {
       sensor.stop()
     }
   })
+  .map(e => e.target.quaternion)
 }
 
 export const calcHeadingFromQuaternion = q => Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
