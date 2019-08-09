@@ -1,4 +1,8 @@
-import {createNewAbsOrientationStream} from './absorientationstream.js'
+import {
+  createNewAbsOrientationStream,
+  calcHeadingFromQuaternion,
+  normalizeHeading
+} from './absorientationstream.js'
 
 const elUpdater = id => {
   const el = document.getElementById(id)
@@ -8,8 +12,6 @@ const elUpdater = id => {
 const setElStyle = (el, attr, value) => () => el.style[attr] = value
 const displayEl = (el, show) => setElStyle(el, "display", show ? "block": "none")
 
-const calcHeadingFromQuaternion = q => Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
-const normalizeHeading = heading => (heading < 0) ? heading += 360 : heading
 const decorateHeading = heading => `${heading} degrees`
 const updateOrientation = elUpdater("orientation") 
 
