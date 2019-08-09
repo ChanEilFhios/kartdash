@@ -12,13 +12,11 @@ const elUpdater = id => {
 const setElStyle = (el, attr, value) => () => el.style[attr] = value
 const displayEl = (el, show) => setElStyle(el, "display", show ? "block": "none")
 
-const decorateHeading = heading => `${heading} degrees`
-const updateOrientation = elUpdater("orientation") 
-
 const orientationStream = createNewAbsOrientationStream()
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 
+const decorateHeading = heading => `${heading} degrees`
 const orientationDisplayStream = orientationStream
   .map(decorateHeading)
 
@@ -64,6 +62,7 @@ const geoLocationStream = rawGeoLocationStream
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
+const updateOrientation = elUpdater("orientation") 
 const stopWatchingOrientation = () => orientationDisplayStream.offValue(updateOrientation)
 const startWatchingOrientation = () => orientationDisplayStream.onValue(updateOrientation)
 
