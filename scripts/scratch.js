@@ -10,13 +10,13 @@ import {
   serializeCoords
 } from './geolocationstream.js'
 
-const elUpdater = id => {
-  const el = document.getElementById(id)
-  return (text) => el.innerHTML = text
-}
+import {
+  elUpdater,
+  displayEl
+} from './domutils'
 
-const setElStyle = (el, attr, value) => () => el.style[attr] = value
-const displayEl = (el, show) => setElStyle(el, "display", show ? "block": "none")
+const stopBtn = document.getElementById("stop")
+const startBtn = document.getElementById("start")
 
 const orientationStream = createNewAbsOrientationStream()
   .map(calcHeadingFromQuaternion)
@@ -34,9 +34,6 @@ const speedGeoStream = rawGeoLocationStream
 
 const geoLocationDisplayStream = rawGeoLocationStream
   .map(serializeCoords)
-
-const stopBtn = document.getElementById("stop")
-const startBtn = document.getElementById("start")
 
 const updateOrientation = elUpdater("orientation") 
 const stopWatchingOrientation = () => orientationDisplayStream.offValue(updateOrientation)
