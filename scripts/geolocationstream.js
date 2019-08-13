@@ -1,3 +1,7 @@
+import {
+  degToRad
+} from './trigutils.js'
+
 export function createGeoLocationStream(options) {
   const streamGeoLocation = emitter => {
     if (navigator && navigator.geolocation) {
@@ -13,8 +17,6 @@ export function createGeoLocationStream(options) {
 }
 
 export const extractSpeed = position => position.coords.speed
-export const calcHeadingFromQuaternion = ({ quaternion: q }) => Math.round(Math.atan2(2 * q[0] * q[1] + 2 * q[2] * q[3], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2]) * (180 / Math.PI))
-export const normalizeHeading = heading => (heading < 0) ? heading += 360 : heading
 export const serializeCoords = position => {
   const props = [`timestamp = ${position.timestamp}`]
   const coords = position.coords
@@ -22,4 +24,16 @@ export const serializeCoords = position => {
     props.push(`${n} = ${coords[n]}`)
   }
   return props.join('<br />')
+}
+
+export const calcSpeedFromLocations = ([firstPos, secondPos]) => {
+  const earthRadius = 6372800
+  const firstLatInRad = degToRad(firstPos.coords.latitude)
+  const secondLatinRad = degToRad(secondPos.coords.latitude)
+  const latDiff = secondLatinRad - firstLatInRad
+  const longDiff = degToRad(secondPos.coords.longitude - firstPos.coords.longitude)
+  const a = Math.sin(latDiff/2)^2 + Math.sin(longDiff/2)^2 * Math.cos(firstLatInRad) * Math.cos(secondLatinRad)
+  const distance = 2 * earthRadius * Math.atan2(a^0.5, (1-a)^0.5)
+
+  return distance / (secondPos.timestamp - firstPos.timestamp)
 }

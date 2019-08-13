@@ -1,13 +1,13 @@
 import {
   createNewAbsOrientationStream,
-  calcHeadingFromQuaternion,
   normalizeHeading
 } from './absorientationstream.js'
 
 import {
   createGeoLocationStream,
   extractSpeed,
-  serializeCoords
+  serializeCoords,
+  calcSpeedFromLocations
 } from './geolocationstream.js'
 
 import {
@@ -19,6 +19,10 @@ import {
 import {
   subscribeIfTrue
 } from './streamutils.js'
+
+import {
+  calcHeadingFromQuaternion
+} from './trigutils.js'
 
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
@@ -33,12 +37,20 @@ const orientationDisplayStream = orientationStream
 
 const rawGeoLocationStream = createGeoLocationStream({ enabledHighAccuracy: true })
 
+const geoLocationDisplayStream = rawGeoLocationStream
+  .map(serializeCoords)
+
+const calcSpeedStream = rawGeoLocationStream
+  .slidingWindow(2, 2)
+  .map(calcSpeedFromLocations)
+
 const speedGeoStream = rawGeoLocationStream
   .map(extractSpeed)
   .filter(speed => speed === null)
 
-const geoLocationDisplayStream = rawGeoLocationStream
-  .map(serializeCoords)
+const speedDisplayStream = speedGeoStream
+  .merge(calcSpeedStream)
+  .map((speed) => `${speed} m/s`)
 
 const updateOrientation = elUpdater("orientation") 
 const updateGeoLocation = elUpdater("geolocation")
@@ -54,4 +66,4 @@ sensorControlStream
   .onValue(showElIfFalse(startBtn))
   .onValue(subscribeIfTrue(orientationDisplayStream, updateOrientation))
   .onValue(subscribeIfTrue(geoLocationDisplayStream, updateGeoLocation))
-  .onValue(subscribeIfTrue(speedGeoStream, updateSpeed))
+  .onValue(subscribeIfTrue(speedDisplayStream, updateSpeed))
