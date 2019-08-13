@@ -16,6 +16,10 @@ import {
   showElIfFalse
 } from './domutils.js'
 
+import {
+  subscribeIfTrue
+} from './streamutils.js'
+
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
@@ -40,15 +44,11 @@ const updateOrientation = elUpdater("orientation")
 const updateGeoLocation = elUpdater("geolocation")
 const updateSpeed = elUpdater("speed")
 
-const subscribeIfTrue = (obss, fn) => value => value ? obss.onValue(fn) : obss.offValue(fn)
-
-const stopClickStream = Kefir.fromEvents(stopBtn, "click")
+const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
   .map(() => false)
+  .merge(Kefir.fromEvents(startBtn, "click")
+    .map(() => true))
 
-const startClickStream = Kefir.fromEvents(startBtn, "click")
-  .map(() => true)
-
-const sensorControlStream = stopClickStream.merge(startClickStream)
 sensorControlStream
   .onValue(showElIfTrue(stopBtn))
   .onValue(showElIfFalse(startBtn))
