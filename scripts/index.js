@@ -51,6 +51,7 @@ const speedGeoStream = rawGeoLocationStream
 const speedDisplayStream = speedGeoStream
   .merge(calcSpeedStream)
   .map(Math.round)
+  .map((speed) => speed * 2.237)
   .map((speed) => `${speed} m/s`)
 
 const updateOrientation = elUpdater("orientation") 
