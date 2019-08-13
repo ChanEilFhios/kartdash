@@ -47,22 +47,18 @@ const updateSpeed = elUpdater("speed")
 const stopWatchingSpeed = () => speedGeoStream.offValue(updateSpeed)
 const startWatchingSpeed = () => speedGeoStream.onValue(updateSpeed)
 
-const monitorSensorStream = Kefir.fromEvents(stopBtn, "click")
-  .map(()=> false)
-  .merge(Kefir.fromEvents(startBtn, "click")
-    .map(() => true))
+const stopClickStream = Kefir.fromEvents(stopBtn, "click")
+stopClickStream
+  .onValue(displayEl(stopBtn, false))
+  .onValue(displayEl(startBtn, true))
+  .onValue(stopWatchingOrientation)
+  .onValue(stopWatchingGeoLocation)
+  .onValue(stopWatchingSpeed)
 
-monitorSensorStream
-  .onValue((monitor) => displayEl(startBtn, !monitor))
-  .onValue((monitor) => displayEl(stopBtn, monitor))
-  .onValue((monitor) => {
-    if (monitor) {
-      startWatchingOrientation
-      startWatchingGeoLocation
-      startWatchingSpeed
-    } else {
-      stopWatchingOrientation
-      stopWatchingGeoLocation
-      stopWatchingSpeed
-    }
-  })
+const startClickStream = Kefir.fromEvents(startBtn, "click")
+startClickStream
+.onValue(displayEl(startBtn, false))
+.onValue(displayEl(stopBtn, true))
+.onValue(startWatchingOrientation)
+.onValue(startWatchingGeoLocation)
+.onValue(startWatchingSpeed)
