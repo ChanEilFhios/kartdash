@@ -13,7 +13,7 @@ import {
 import {
   elUpdater,
   displayEl
-} from './domutils'
+} from './domutils.js'
 
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
