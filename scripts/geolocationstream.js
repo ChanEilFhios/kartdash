@@ -1,5 +1,6 @@
 import {
-  degToRad
+  degToRad,
+  haversine
 } from './trigutils.js'
 
 export function createGeoLocationStream(options) {
@@ -26,14 +27,4 @@ export const serializeCoords = position => {
   return props.join('<br />')
 }
 
-export const calcSpeedFromLocations = ([firstPos, secondPos]) => {
-  const earthRadius = 6372800
-  const firstLatInRad = degToRad(firstPos.coords.latitude)
-  const secondLatinRad = degToRad(secondPos.coords.latitude)
-  const latDiff = secondLatinRad - firstLatInRad
-  const longDiff = degToRad(secondPos.coords.longitude - firstPos.coords.longitude)
-  const a = Math.sin(latDiff/2)^2 + Math.sin(longDiff/2)^2 * Math.cos(firstLatInRad) * Math.cos(secondLatinRad)
-  const distance = 2 * earthRadius * Math.atan2(a^0.5, (1-a)^0.5)
-
-  return distance / (secondPos.timestamp - firstPos.timestamp)
-}
+export const calcSpeedFromLocations = ([firstPos, secondPos]) => haversine(firstPos.coords, endPos.coords) / (secondPos.timestamp - firstPos.timestamp)
