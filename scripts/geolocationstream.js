@@ -1,5 +1,4 @@
 import {
-  degToRad,
   haversine
 } from './trigutils.js'
 
@@ -27,4 +26,4 @@ export const serializeCoords = position => {
   return props.join('<br />')
 }
 
-export const calcSpeedFromLocations = ([firstPos, secondPos]) => haversine(firstPos.coords, endPos.coords) / (secondPos.timestamp - firstPos.timestamp)
+export const calcSpeedFromLocations = ([firstPos, secondPos]) => haversine(firstPos.coords, secondPos.coords) / (secondPos.timestamp - firstPos.timestamp)
