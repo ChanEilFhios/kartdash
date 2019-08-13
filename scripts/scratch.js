@@ -12,7 +12,8 @@ import {
 
 import {
   elUpdater,
-  displayEl
+  showElIfTrue,
+  showElIfFalse
 } from './domutils.js'
 
 const stopBtn = document.getElementById("stop")
@@ -50,8 +51,6 @@ const startWatchingSpeed = () => speedGeoStream.onValue(updateSpeed)
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
   .map(() => false)
 stopClickStream
-  .onValue(displayEl(stopBtn, false))
-  .onValue(displayEl(startBtn, true))
   .onValue(stopWatchingOrientation)
   .onValue(stopWatchingGeoLocation)
   .onValue(stopWatchingSpeed)
@@ -59,8 +58,11 @@ stopClickStream
 const startClickStream = Kefir.fromEvents(startBtn, "click")
   .map(() => true)
 startClickStream
-.onValue(displayEl(startBtn, false))
-.onValue(displayEl(stopBtn, true))
 .onValue(startWatchingOrientation)
 .onValue(startWatchingGeoLocation)
 .onValue(startWatchingSpeed)
+
+const sensorControlStream = stopClickStream.merge(startClickStream)
+sensorControlStream
+  .onValue(showElIfTrue(stopBtn))
+  .onValue(showElIfFalse(startBtn))
