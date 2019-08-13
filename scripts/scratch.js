@@ -48,6 +48,7 @@ const stopWatchingSpeed = () => speedGeoStream.offValue(updateSpeed)
 const startWatchingSpeed = () => speedGeoStream.onValue(updateSpeed)
 
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
+  .map(() => false)
 stopClickStream
   .onValue(displayEl(stopBtn, false))
   .onValue(displayEl(startBtn, true))
@@ -56,6 +57,7 @@ stopClickStream
   .onValue(stopWatchingSpeed)
 
 const startClickStream = Kefir.fromEvents(startBtn, "click")
+  .map(() => true)
 startClickStream
 .onValue(displayEl(startBtn, false))
 .onValue(displayEl(stopBtn, true))
