@@ -41,17 +41,18 @@ const geoLocationDisplayStream = rawGeoLocationStream
   .map(serializeCoords)
 
 const calcSpeedStream = rawGeoLocationStream
-  .filter((position) => position.coords.speed !== null)
+  .filter((position) => position.coords.speed === null)
   .slidingWindow(2, 2)
   .map(calcSpeedFromLocations)
 
 const speedGeoStream = rawGeoLocationStream
   .map(extractSpeed)
-  .filter(speed => speed === null)
+  .filter(speed => speed !== null)
 
 const speedDisplayStream = speedGeoStream
   .merge(calcSpeedStream)
   .map((speed) => speed * 2.237)
+  .map(Math.round)
   .map((speed) => `${speed} mph`)
 
 const updateOrientation = elUpdater("orientation") 
