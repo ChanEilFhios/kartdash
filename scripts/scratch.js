@@ -37,8 +37,6 @@ const geoLocationDisplayStream = rawGeoLocationStream
   .map(serializeCoords)
 
 const updateOrientation = elUpdater("orientation") 
-const stopWatchingOrientation = () => orientationDisplayStream.offValue(updateOrientation)
-const startWatchingOrientation = () => orientationDisplayStream.onValue(updateOrientation)
 
 const updateGeoLocation = elUpdater("geolocation")
 const stopWatchingGeoLocation = () => geoLocationDisplayStream.offValue(updateGeoLocation)
@@ -48,17 +46,17 @@ const updateSpeed = elUpdater("speed")
 const stopWatchingSpeed = () => speedGeoStream.offValue(updateSpeed)
 const startWatchingSpeed = () => speedGeoStream.onValue(updateSpeed)
 
+const subscribeIfTrue = (obss, fn) => value => value ? obss.onValue(fn) : obss.offValue(fn)
+
 const stopClickStream = Kefir.fromEvents(stopBtn, "click")
   .map(() => false)
 stopClickStream
-  .onValue(stopWatchingOrientation)
   .onValue(stopWatchingGeoLocation)
   .onValue(stopWatchingSpeed)
 
 const startClickStream = Kefir.fromEvents(startBtn, "click")
   .map(() => true)
 startClickStream
-.onValue(startWatchingOrientation)
 .onValue(startWatchingGeoLocation)
 .onValue(startWatchingSpeed)
 
@@ -66,3 +64,4 @@ const sensorControlStream = stopClickStream.merge(startClickStream)
 sensorControlStream
   .onValue(showElIfTrue(stopBtn))
   .onValue(showElIfFalse(startBtn))
+  .onValue(subscribeIfTrue(orientationDisplayStream, updateOrientation))
