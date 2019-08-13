@@ -41,6 +41,7 @@ const geoLocationDisplayStream = rawGeoLocationStream
   .map(serializeCoords)
 
 const calcSpeedStream = rawGeoLocationStream
+  .filter((position) => position.coords.speed !== null)
   .slidingWindow(2, 2)
   .map(calcSpeedFromLocations)
 
