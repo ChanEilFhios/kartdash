@@ -26,4 +26,4 @@ export const serializeCoords = position => {
   return props.join('<br />')
 }
 
-export const calcSpeedFromLocations = ([firstPos, secondPos]) => haversine(firstPos.coords, secondPos.coords) / (secondPos.timestamp - firstPos.timestamp)
+export const calcSpeedFromLocations = ([firstPos, secondPos]) => haversine(firstPos.coords, secondPos.coords) / (secondPos.timestamp - firstPos.timestamp) * 1000
