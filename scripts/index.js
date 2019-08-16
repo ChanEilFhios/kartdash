@@ -26,6 +26,10 @@ import {
 
 const track = []
 
+export const printTrack = () => {
+  console.log(track)
+}
+
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
