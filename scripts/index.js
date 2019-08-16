@@ -54,15 +54,15 @@ const speedDisplayStream = speedGeoStream
   .map((speed) => speed * 2.237)
   .map(Math.round)
   .map((speed) => `${speed} mph`)
+  
+const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
+  .map(() => false)
+  .merge(Kefir.fromEvents(startBtn, "click")
+  .map(() => true))
 
 const updateOrientation = elUpdater("orientation") 
 const updateGeoLocation = elUpdater("geolocation")
 const updateSpeed = elUpdater("speed")
-
-const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
-  .map(() => false)
-  .merge(Kefir.fromEvents(startBtn, "click")
-    .map(() => true))
 
 sensorControlStream
   .onValue(showElIfTrue(stopBtn))
