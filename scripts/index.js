@@ -24,6 +24,8 @@ import {
   calcHeadingFromQuaternion
 } from './trigutils.js'
 
+const track - []
+
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
@@ -63,6 +65,7 @@ const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
 const updateOrientation = elUpdater("orientation") 
 const updateGeoLocation = elUpdater("geolocation")
 const updateSpeed = elUpdater("speed")
+const recordTrack = position => track.push(position)
 
 sensorControlStream
   .onValue(showElIfTrue(stopBtn))
@@ -70,3 +73,4 @@ sensorControlStream
   .onValue(subscribeIfTrue(orientationDisplayStream, updateOrientation))
   .onValue(subscribeIfTrue(geoLocationDisplayStream, updateGeoLocation))
   .onValue(subscribeIfTrue(speedDisplayStream, updateSpeed))
+  .onValue(subscribeIfTrue(rawGeoLocationStream, recordTrack))
