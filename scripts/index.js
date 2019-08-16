@@ -24,7 +24,7 @@ import {
   calcHeadingFromQuaternion
 } from './trigutils.js'
 
-const track - []
+const track = []
 
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
