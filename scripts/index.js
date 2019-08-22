@@ -33,7 +33,7 @@ export const printTrack = () => {
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
-const orientationStream = createNewAbsOrientationStream()
+const orientationStream = createNewAbsOrientationStream({ referenceFrame: "screen" })
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 
