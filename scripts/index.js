@@ -37,9 +37,8 @@ const orientationStream = createNewAbsOrientationStream()
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 
-const decorateHeading = heading => `${heading} degrees`
 const orientationDisplayStream = orientationStream
-  .map(decorateHeading)
+  .map(heading => `${heading} degrees`)
 
 const rawGeoLocationStream = createGeoLocationStream({ enabledHighAccuracy: true })
 
