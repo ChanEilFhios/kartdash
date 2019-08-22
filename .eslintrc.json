@@ -8,6 +8,7 @@
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
         "AbsoluteOrientationSensor": "readonly",
+        "LinearAccelerationSensor": "readonly",
         "Kefir": "readonly"
     },
     "parserOptions": {

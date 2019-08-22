@@ -4,6 +4,11 @@ import {
 } from './absorientationstream.js'
 
 import {
+  createNewLinAccelerationStream,
+  serializeAcceleration
+} from './linaccelerationstream.js'
+
+import {
   createGeoLocationStream,
   extractSpeed,
   serializeCoords,
@@ -32,6 +37,9 @@ export const printTrack = () => {
 
 const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
+
+const accelerationStream = createNewLinAccelerationStream({referenceFrame: "screen"})
+const accelerationDisplayStream = accelerationStream.map(serializeAcceleration)
 
 const orientationStream = createNewAbsOrientationStream({ referenceFrame: "screen" })
   .map(calcHeadingFromQuaternion)
@@ -67,6 +75,7 @@ const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
 
 const updateOrientation = elUpdater("orientation") 
 const updateGeoLocation = elUpdater("geolocation")
+const updateAcceleration = elUpdater("acceleration")
 const updateSpeed = elUpdater("speed")
 const recordTrack = position => track.push(position)
 
@@ -75,5 +84,6 @@ sensorControlStream
   .onValue(showElIfFalse(startBtn))
   .onValue(subscribeIfTrue(orientationDisplayStream, updateOrientation))
   .onValue(subscribeIfTrue(geoLocationDisplayStream, updateGeoLocation))
+  .onValue(subscribeIfTrue(accelerationDisplayStream, updateAcceleration))
   .onValue(subscribeIfTrue(speedDisplayStream, updateSpeed))
   .onValue(subscribeIfTrue(rawGeoLocationStream, recordTrack))
