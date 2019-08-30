@@ -10,5 +10,5 @@ export const showElIfFalse = el => value => setElStyle(el, "display", !value ? "
 
 export const gaugeUpdater = id => {
   const gauge = document.getElementById(id)
-  return (value) => gauge.value = value
+  return (value) => gauge.setAttribute("data-value", value)
 }
