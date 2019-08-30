@@ -8,6 +8,8 @@
   grid-template-columns: 5fr 1fr 5fr 1fr;
   grid-template-rows: 5fr 5fr;
   grid-template-areas: "speedo y compass o" "speedo z compass x";
+  height: 100%;
+  width: 100%
 }
 
 #speed {
