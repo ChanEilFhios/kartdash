@@ -29,10 +29,16 @@
       <canvas id="ygauge" data-type="linear-gauge" data-units="g"
         data-min-value="-1.5" data-max-value="1.5", data-value-box="false"
         data-ticks-width="0" data-major-ticks="-1.5,0,1.5"
+        data-title="y-accel"
         data-bar-begin-circle="false">
       </canvas>
     </div>
-    <div id="z"></div>
+    <div id="z">
+      <canvas id="zgauge" data-type="linear-gauge" data-units="g" data-min-value="-1.5" data-max-value="1.5" ,
+        data-value-box="false" data-ticks-width="0" data-major-ticks="-1.5,0,1.5" data-title="z-accel"
+        data-bar-begin-circle="false">
+      </canvas>
+    </div>
     <div id="orientation">
       <canvas id="orientationgauge" data-type="radial-gauge" data-min-value="0" data-max-value="360"
         data-major-ticks="N,NE,E,SE,S,SW,W,NW,N" data-minor-ticks="22" data-ticks-angle="360" data-start-angle="180"
@@ -52,7 +58,12 @@
       <button id="start">Start</button>
       <button id="stop">Stop</button>
     </div>
-    <div id="x"></div>
+    <div id="x">
+      <canvas id="xgauge" data-type="linear-gauge" data-units="g" data-min-value="-1.5" data-max-value="1.5" ,
+        data-value-box="false" data-ticks-width="0" data-major-ticks="-1.5,0,1.5" data-title="x-accel"
+        data-bar-begin-circle="false">
+      </canvas>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/kefir/3.8.0/kefir.min.js"></script>
