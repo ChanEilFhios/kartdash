@@ -12,18 +12,17 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Full GeoLocation Record</h1>
-    <span id="geolocation"></span>
-    <h1>Speed</h1>
-    <span id="speed"></span>
-    <h1>Orientation</h1>
-    <span id="orientation"></span>
-    <h1>Acceleration</h1>
-    <span id="acceleration"></span>
-    <br />
-    <br />
-    <button id="start">Start</button>
-    <button id="stop">Stop</button>
+    <div class="container">
+      <div id="speed"></div>
+      <div id="y"></div>
+      <div id="z"></div>
+      <div id="orientation"></div>
+      <div id="controls">
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+      </div>
+      <div id="x"></div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/kefir/3.8.0/kefir.min.js"></script>
     <script type="module" src="scripts/index.js"></script>

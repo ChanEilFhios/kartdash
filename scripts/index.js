@@ -50,8 +50,8 @@ const orientationDisplayStream = orientationStream
 
 const rawGeoLocationStream = createGeoLocationStream({ enabledHighAccuracy: true })
 
-const geoLocationDisplayStream = rawGeoLocationStream
-  .map(serializeCoords)
+// const geoLocationDisplayStream = rawGeoLocationStream
+//   .map(serializeCoords)
 
 const calcSpeedStream = rawGeoLocationStream
   .filter((position) => position.coords.speed === null)
@@ -74,7 +74,7 @@ const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
   .map(() => true))
 
 const updateOrientation = elUpdater("orientation") 
-const updateGeoLocation = elUpdater("geolocation")
+// const updateGeoLocation = elUpdater("geolocation")
 const updateAcceleration = elUpdater("acceleration")
 const updateSpeed = elUpdater("speed")
 const recordTrack = position => track.push(position)
@@ -83,7 +83,7 @@ sensorControlStream
   .onValue(showElIfTrue(stopBtn))
   .onValue(showElIfFalse(startBtn))
   .onValue(subscribeIfTrue(orientationDisplayStream, updateOrientation))
-  .onValue(subscribeIfTrue(geoLocationDisplayStream, updateGeoLocation))
+  // .onValue(subscribeIfTrue(geoLocationDisplayStream, updateGeoLocation))
   .onValue(subscribeIfTrue(accelerationDisplayStream, updateAcceleration))
   .onValue(subscribeIfTrue(speedDisplayStream, updateSpeed))
   .onValue(subscribeIfTrue(rawGeoLocationStream, recordTrack))
