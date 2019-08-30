@@ -11,14 +11,14 @@ import {
 import {
   createGeoLocationStream,
   extractSpeed,
-  serializeCoords,
   calcSpeedFromLocations
 } from './geolocationstream.js'
 
 import {
   elUpdater,
   showElIfTrue,
-  showElIfFalse
+  showElIfFalse,
+  gaugeUpdater
 } from './domutils.js'
 
 import {
@@ -45,9 +45,6 @@ const orientationStream = createNewAbsOrientationStream({ referenceFrame: "scree
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 
-const orientationDisplayStream = orientationStream
-  .map(heading => `${heading} degrees`)
-
 const rawGeoLocationStream = createGeoLocationStream({ enabledHighAccuracy: true })
 
 // const geoLocationDisplayStream = rawGeoLocationStream
@@ -73,7 +70,7 @@ const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
   .merge(Kefir.fromEvents(startBtn, "click")
   .map(() => true))
 
-const updateOrientation = elUpdater("orientation") 
+const updateOrientation = gaugeUpdater("orientation") 
 // const updateGeoLocation = elUpdater("geolocation")
 const updateAcceleration = elUpdater("acceleration")
 const updateSpeed = elUpdater("speed")
@@ -82,7 +79,7 @@ const recordTrack = position => track.push(position)
 sensorControlStream
   .onValue(showElIfTrue(stopBtn))
   .onValue(showElIfFalse(startBtn))
-  .onValue(subscribeIfTrue(orientationDisplayStream, updateOrientation))
+  .onValue(subscribeIfTrue(orientationStream, updateOrientation))
   // .onValue(subscribeIfTrue(geoLocationDisplayStream, updateGeoLocation))
   .onValue(subscribeIfTrue(accelerationDisplayStream, updateAcceleration))
   .onValue(subscribeIfTrue(speedDisplayStream, updateSpeed))
