@@ -39,16 +39,12 @@ const stopBtn = document.getElementById("stop")
 const startBtn = document.getElementById("start")
 
 const accelerationStream = createNewLinAccelerationStream({referenceFrame: "screen"})
-const accelerationDisplayStream = accelerationStream.map(serializeAcceleration)
 
 const orientationStream = createNewAbsOrientationStream({ referenceFrame: "screen" })
   .map(calcHeadingFromQuaternion)
   .map(normalizeHeading)
 
 const rawGeoLocationStream = createGeoLocationStream({ enabledHighAccuracy: true })
-
-// const geoLocationDisplayStream = rawGeoLocationStream
-//   .map(serializeCoords)
 
 const calcSpeedStream = rawGeoLocationStream
   .filter((position) => position.coords.speed === null)
@@ -69,9 +65,15 @@ const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
   .merge(Kefir.fromEvents(startBtn, "click")
   .map(() => true))
 
-const updateOrientation = gaugeUpdater("orientationgauge") 
-// const updateGeoLocation = elUpdater("geolocation")
-const updateAcceleration = elUpdater("acceleration")
+const updateOrientation = gaugeUpdater("orientationgauge")
+const updateXAccel = gaugeUpdater("xgauge")
+const updateYAccel = gaugeUpdater("ygauge")
+const updateZAccel = gaugeUpdater("zgauge")
+const updateAcceleration = accelerations => {
+  updateXAccel(accelerations.x)
+  updateYAccel(accelerations.y)
+  updateZAccel(accelerations.z)
+}
 const updateSpeed = gaugeUpdater("speedgauge")
 const recordTrack = position => track.push(position)
 
@@ -79,7 +81,6 @@ sensorControlStream
   .onValue(showElIfTrue(stopBtn))
   .onValue(showElIfFalse(startBtn))
   .onValue(subscribeIfTrue(orientationStream, updateOrientation))
-  // .onValue(subscribeIfTrue(geoLocationDisplayStream, updateGeoLocation))
-  .onValue(subscribeIfTrue(accelerationDisplayStream, updateAcceleration))
+  .onValue(subscribeIfTrue(accelerationStream, updateAcceleration))
   .onValue(subscribeIfTrue(speedDisplayStream, updateSpeed))
   .onValue(subscribeIfTrue(rawGeoLocationStream, recordTrack))
