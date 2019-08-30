@@ -18,10 +18,13 @@
   grid-area: compass;
 }
 
-#y {
-  grid-area: y;
+canvas {
   width: 100%;
   height: 100%;
+}
+
+#y {
+  grid-area: y;
 }
 
 #z {

@@ -15,33 +15,39 @@
 
 <body>
   <div class="container">
-    <canvas id="speed" data-type="radial-gauge" data-width="300" data-height="300" data-units="mph" data-min-value="0"
-      data-max-value="80" data-major-ticks="0,20,40,60,80" data-minor-ticks="2"
-      data-stroke-ticks="true" data-highlights='[
-            {"from": 65, "to": 80, "color": "rgba(200, 50, 50, .75)"}
-        ]' data-color-plate="#fff" data-border-shadow-width="0" data-borders="false" data-needle-type="arrow"
-      data-needle-width="2" data-needle-circle-size="7" data-needle-circle-outer="true" data-needle-circle-inner="false"
-      data-animation-duration="1500" data-animation-rule="linear">
-    </canvas>
-    <canvas id="y" data-type="linear-gauge" data-units="g"
-      data-min-value="-1.5" data-max-value="1.5", data-value-box="false"
-      data-ticks-width="0"
-      data-bar-begin-circle="false">
-    </canvas>
+    <div id="speed">
+      <canvas id="speedgauge" data-type="radial-gauge" data-width="300" data-height="300" data-units="mph" data-min-value="0"
+        data-max-value="80" data-major-ticks="0,20,40,60,80" data-minor-ticks="2"
+        data-stroke-ticks="true" data-highlights='[
+              {"from": 65, "to": 80, "color": "rgba(200, 50, 50, .75)"}
+          ]' data-color-plate="#fff" data-border-shadow-width="0" data-borders="false" data-needle-type="arrow"
+        data-needle-width="2" data-needle-circle-size="7" data-needle-circle-outer="true" data-needle-circle-inner="false"
+        data-animation-duration="1500" data-animation-rule="linear">
+      </canvas>
+    </div>
+    <div id="y">
+      <canvas id="ygauge" data-type="linear-gauge" data-units="g"
+        data-min-value="-1.5" data-max-value="1.5", data-value-box="false"
+        data-ticks-width="0"
+        data-bar-begin-circle="false">
+      </canvas>
+    </div>
     <div id="z"></div>
-    <canvas id="orientation" data-type="radial-gauge" data-min-value="0" data-max-value="360" data-width="300" data-height="300"
-      data-major-ticks="N,NE,E,SE,S,SW,W,NW,N" data-minor-ticks="22" data-ticks-angle="360" data-start-angle="180"
-      data-stroke-ticks="false" data-highlights="false" data-color-plate="#33a" data-color-major-ticks="#f5f5f5"
-      data-color-minor-ticks="#ddd" data-color-numbers="#ccc" data-color-needle="rgba(240, 128, 128, 1)"
-      data-color-needle-end="rgba(255, 160, 122, .9)" data-value-box="false" data-value-text-shadow="false"
-      data-color-circle-inner="#fff" data-color-needle-circle-outer="#ccc" data-needle-circle-size="15"
-      data-needle-circle-outer="false" data-animation-rule="linear" data-needle-type="line" data-needle-start="75"
-      data-needle-end="99" data-needle-width="3" data-borders="true" data-border-inner-width="0"
-      data-border-middle-width="0" data-border-outer-width="10" data-color-border-outer="#ccc"
-      data-color-border-outer-end="#ccc" data-color-needle-shadow-down="#222" data-border-shadow-width="0"
-      data-animation-target="plate" data-title="DIRECTION" data-font-title-size="19"
-      data-color-title="#f5f5f5" data-animation-duration="1500">
-    </canvas>
+    <div id="orientation">
+      <canvas id="orientationgauge" data-type="radial-gauge" data-min-value="0" data-max-value="360" data-width="300" data-height="300"
+        data-major-ticks="N,NE,E,SE,S,SW,W,NW,N" data-minor-ticks="22" data-ticks-angle="360" data-start-angle="180"
+        data-stroke-ticks="false" data-highlights="false" data-color-plate="#33a" data-color-major-ticks="#f5f5f5"
+        data-color-minor-ticks="#ddd" data-color-numbers="#ccc" data-color-needle="rgba(240, 128, 128, 1)"
+        data-color-needle-end="rgba(255, 160, 122, .9)" data-value-box="false" data-value-text-shadow="false"
+        data-color-circle-inner="#fff" data-color-needle-circle-outer="#ccc" data-needle-circle-size="15"
+        data-needle-circle-outer="false" data-animation-rule="linear" data-needle-type="line" data-needle-start="75"
+        data-needle-end="99" data-needle-width="3" data-borders="true" data-border-inner-width="0"
+        data-border-middle-width="0" data-border-outer-width="10" data-color-border-outer="#ccc"
+        data-color-border-outer-end="#ccc" data-color-needle-shadow-down="#222" data-border-shadow-width="0"
+        data-animation-target="plate" data-title="DIRECTION" data-font-title-size="19"
+        data-color-title="#f5f5f5" data-animation-duration="1500">
+      </canvas>
+    </div>
     <div id="controls">
       <button id="start">Start</button>
       <button id="stop">Stop</button>

@@ -69,10 +69,10 @@ const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
   .merge(Kefir.fromEvents(startBtn, "click")
   .map(() => true))
 
-const updateOrientation = gaugeUpdater("orientation") 
+const updateOrientation = gaugeUpdater("orientationgauge") 
 // const updateGeoLocation = elUpdater("geolocation")
 const updateAcceleration = elUpdater("acceleration")
-const updateSpeed = gaugeUpdater("speed")
+const updateSpeed = gaugeUpdater("speedgauge")
 const recordTrack = position => track.push(position)
 
 sensorControlStream
