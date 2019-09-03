@@ -5,7 +5,6 @@ import {
 
 import {
   createNewLinAccelerationStream,
-  serializeAcceleration
 } from './linaccelerationstream.js'
 
 import {
@@ -15,7 +14,6 @@ import {
 } from './geolocationstream.js'
 
 import {
-  elUpdater,
   showElIfTrue,
   showElIfFalse,
   gaugeUpdater
