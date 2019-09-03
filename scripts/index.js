@@ -61,7 +61,7 @@ const speedDisplayStream = speedGeoStream
 const sensorControlStream = Kefir.fromEvents(stopBtn, "click")
   .map(() => false)
   .merge(Kefir.fromEvents(startBtn, "click")
-  .map(() => true))
+    .map(() => true))
 
 const updateOrientation = gaugeUpdater("orientationgauge")
 const updateXAccel = gaugeUpdater("xgauge")
